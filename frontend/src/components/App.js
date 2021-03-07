@@ -10,24 +10,24 @@ import { Button } from "@material-ui/core";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState();
-  const [username, setUsername] = useState();
+  const [userKey, setUserKey] = useState();
 
   const sessionInfo = async () => {
     await fetch("/api/user_logged_in")
       .then((response) => response.json())
       .then((data) => {
-        setUsername(data.user_name);
+        setUserKey(data.user_key);
         setLoggedIn(data.logged_in);
       });
   };
 
   useEffect(() => {
     sessionInfo();
-  }, [loggedIn, username]);
+  }, [loggedIn, userKey]);
 
   const renderHomepage = () => {
     if (loggedIn) {
-      return <Homepage loggedIn={loggedIn} username={username} />;
+      return <Homepage loggedIn={loggedIn} userKey={userKey} />;
     } else {
       return (
         <div>
@@ -45,16 +45,16 @@ function App() {
     }
   };
 
-  console.log({ loggedIn: loggedIn, username: username });
+  console.log({ loggedIn: loggedIn, userKey });
   return (
     <div>
       <Router>
         <Switch>
           <Route path="/log_in">
-            <Login setLoggedIn={setLoggedIn} setUsername={setUsername} />
+            <Login />
           </Route>
           <Route path="/sign_up">
-            <SignUp setLoggedIn={setLoggedIn} setUsername={setUsername} />
+            <SignUp />
           </Route>
           <Route path="/">{renderHomepage()} </Route>
         </Switch>

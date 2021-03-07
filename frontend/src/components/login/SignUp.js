@@ -1,11 +1,12 @@
 import React from "react";
 import { Button, Grid, TextField } from "@material-ui/core";
 import { useState } from "react";
+import getCookie from "../../csrftoken";
 
 function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const csrftoken = getCookie();
   const username_change = (e) => {
     setUsername(e.target.value);
   };
@@ -15,16 +16,26 @@ function SignUp() {
 
   const signup_clicked = () => {
     const requestOptions = {
+      credentials: "include",
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
       body: JSON.stringify({
         user_name: username,
         password: password,
       }),
     };
-    fetch("api/sign_up", requestOptions)
-      .then((response) => response)
-      .then((data) => console.log(data));
+    fetch("http://127.0.0.1:8000/api/sign_up", requestOptions).then(
+      (response) => {
+        if (response.ok) {
+          window.location.href = "/log_in";
+        } else {
+          alert("Error with the page");
+        }
+      }
+    );
   };
   return (
     <Grid className="signup" container spacing={2}>

@@ -4,6 +4,8 @@ object-assign
 @license MIT
 */
 
+/*! ../../csrftoken */
+
 /*! ../../utils/createSvgIcon */
 
 /*! ../ButtonBase */
@@ -81,6 +83,8 @@ object-assign
 /*! ../colors/red */
 
 /*! ../createGenerateClassName */
+
+/*! ../csrftoken */
 
 /*! ../getStylesCreator */
 
@@ -349,6 +353,10 @@ object-assign
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
+
+/*!**************************!*\
+  !*** ./src/csrftoken.js ***!
+  \**************************/
 
 /*!*******************************!*\
   !*** ./src/components/App.js ***!

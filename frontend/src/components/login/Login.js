@@ -3,6 +3,7 @@ import { Button, Grid, TextField } from "@material-ui/core";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
+import getCookie from "../../csrftoken";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -17,8 +18,12 @@ function Login() {
   };
   const login_clicked = async () => {
     const requestOptions = {
+      credentials: "include",
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie(),
+      },
       body: JSON.stringify({
         user_name: username,
         password: password,
@@ -29,6 +34,7 @@ function Login() {
         if (response.ok) {
           window.location.href = "/";
         } else {
+          console.log(response.statusText);
           setError("Invalid Username or Password");
         }
       }
