@@ -23,5 +23,6 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("note/", include("note.urls"), name="note"),
     path("questions/", include("questions.urls"), name="questions"),
+    path("answers/", include('answers.urls'), name="answers"),
     path("", include("frontend.urls"), name="frontend"),
 ]
