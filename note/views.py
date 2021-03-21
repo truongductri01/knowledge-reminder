@@ -1,10 +1,10 @@
-from django.http.response import JsonResponse
+from django.http.response import Http404, JsonResponse
 from rest_framework.views import APIView
 from .models import Note
 from api.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializers import GetAllNotesSerializer, GetNotesFromUserSerializer,NoteSerializer, CreateNoteSerializer
+from .serializers import *
 
 # Create your views here.
 class GetNotes(generics.ListAPIView):
@@ -32,29 +32,51 @@ class GetNoteFromUser(APIView):
 
 class GetNote(APIView):
     def get(self, request, format=None):
-        note_id: str = request.GET.get("note_id")
-        if note_id.isnumeric():
-            notes = Note.objects.filter(pk=note_id)
-            if notes.exists():
-                note = notes[0]
-                return Response(NoteSerializer(note).data, status=status.HTTP_200_OK)
-        return Response({"Bad Request": "Invalid Id"}, status=status.HTTP_400_BAD_REQUEST)
+        snippet = get_object(request.GET.get("note_id"))
+        serializer = NoteSerializer(snippet)
+        return Response(serializer.data)
 
 class CreateNote(APIView):
     serializer_class = CreateNoteSerializer
+    lookup_url_kwarg = "user_key"
     def post(self, request, format = None):
+        user_key = request.GET.get(self.lookup_url_kwarg)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            print("Valid")
-            note = Note(user=User.objects.filter(pk=serializer.data.get("user"))[0], note_title=serializer.data.get("note_title"))
-            note.save()
-            return Response({"Success": "Created new Note"}, status=status.HTTP_200_OK)
+            users = User.objects.filter(user_key=user_key)
+            if users.exists():
+                user = users[0]
+                note = Note(user=user, note_title=serializer.data.get("note_title"))
+                note.save()
+                return Response({"Success": "Created new Note"}, status=status.HTTP_200_OK)
+            return Response({"Bad Request": "User does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"Bad Request": "Cannot create new Note"}, status=status.HTTP_200_OK)
 
-class EditNote(APIView):
-    pass
+class EditAndDeleteNote(APIView):
+    serializer_class = EditNoteSerializer
+    lookup_url_kwarg = "note_id"
 
-class DeleteNote(APIView):
-    pass
+    def get(self, request, format=None):
+        snippet = get_object(request.GET.get(self.lookup_url_kwarg))
+        serializer = EditNoteSerializer(snippet)
+        return Response(serializer.data)
 
+    def put(self, request, format=None):
+        note = get_object(note_id=request.GET.get(self.lookup_url_kwarg))
+        serializer = EditNoteSerializer(note, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"Bad Request": "Not a valid serializer"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, format=None):
+        note = get_object(request.GET.get(self.lookup_url_kwarg))
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+def get_object(note_id):
+        try:
+            return Note.objects.get(pk=note_id)
+        except Note.DoesNotExist:
+            raise Http404
     

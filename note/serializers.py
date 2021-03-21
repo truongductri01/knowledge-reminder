@@ -6,7 +6,7 @@ from rest_framework import serializers
 class GetAllNotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields=("user", "note_title", "created_at")
+        fields=("user", "note_title", "created_at", "pk")
 
 
 class GetNotesFromUserSerializer(serializers.ModelSerializer):
@@ -22,4 +22,10 @@ class NoteSerializer(serializers.ModelSerializer):
 class CreateNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields = ("user", "note_title")
+        fields = ("note_title",)
+
+# Note cannot be switch between users
+class EditNoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ("note_title",)
