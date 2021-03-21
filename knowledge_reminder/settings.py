@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "frontend.apps.FrontendConfig",
     "note.apps.NoteConfig",
-    "questions.apps.QuestionsConfig"
+    "questions.apps.QuestionsConfig",
+    "answers.apps.AnswersConfig"
 
 ]
 
