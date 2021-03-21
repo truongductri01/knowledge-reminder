@@ -4,20 +4,20 @@ from .models import Question
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ("title", "note", "categories")
+        fields = ("question_title", "note", "categories", "pk")
 
 class QuestionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ("title", "note", "categories")
+        fields = ("question_title", "categories")
 
 class QuestionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ("title", "note", "categories")
+        fields = ("question_title", "categories")
 
-class QuestionFromNoteSerializer(serializers.ModelSerializer):
+class EditQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ("title", "note")
+        fields = ("question_title",)
 
