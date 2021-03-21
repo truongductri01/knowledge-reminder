@@ -1,8 +1,6 @@
 import React from "react";
-import { Button, Grid, TextField } from "@material-ui/core";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Alert } from "@material-ui/lab";
 import getCookie from "../../csrftoken";
 
 function Login() {
@@ -16,7 +14,8 @@ function Login() {
   const password_change = (e) => {
     setPassword(e.target.value);
   };
-  const login_clicked = async () => {
+  const login_clicked = async (e) => {
+    e.preventDefault();
     const requestOptions = {
       credentials: "include",
       method: "POST",
@@ -41,75 +40,65 @@ function Login() {
     );
   };
   return (
-    <Grid className="signup" container align="center" spacing={2}>
-      <Grid item xs={12} align="center">
-        <h1>Log In</h1>
-      </Grid>
-      <Grid container xs={8} spacing={2}>
-        <Grid item xs={12} align="center">
-          <TextField
-            id="outlined-basic"
-            label="User name"
-            variant="outlined"
-            value={username}
+    <div className="container">
+      <h1>Log In</h1>
+      <form>
+        <div class="form-group">
+          <label for="email">User Name:</label>
+          <input
+            class="form-control"
+            placeholder="Enter Username"
             onChange={username_change}
-            fullWidth
           />
-        </Grid>
-        <Grid item xs={12} align="center">
-          <TextField
-            id="outlined-basic"
-            label="Password"
-            variant="outlined"
-            value={password}
-            onChange={password_change}
-            fullWidth
-          />
-        </Grid>
-      </Grid>
-
-      <Grid item xs={4} align="center" style={{ padding: "0" }}>
-        <Button
-          variant="contained"
-          color="primary"
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Enter password"
+              id="pwd"
+              onChange={password_change}
+            />
+          </div>
+        </div>
+        {error && (
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            <strong>Error!</strong> {error}
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={() => setError()}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        )}
+        <button
+          className="btn btn-primary btn-block mb-4"
           onClick={login_clicked}
-          style={{ height: "100%", width: "90%" }}
         >
           Log In
-        </Button>
-      </Grid>
+        </button>
+      </form>
 
-      {error != null && (
-        <Grid item xs={12} align="center">
-          <Alert severity="error" onClose={() => setError()}>
-            {error}
-          </Alert>
-        </Grid>
-      )}
-
-      <Grid item xs={6} spacing={5} align="center" justify="center">
-        <Button
-          variant="contained"
-          color="secondary"
-          fullWidth
-          to="/"
-          component={Link}
-        >
-          Back
-        </Button>
-      </Grid>
-      <Grid item xs={6} align="center">
-        <Button
-          variant="contained"
-          color="default"
-          fullWidth
-          to="/sign_up"
-          component={Link}
-        >
-          Sign Up
-        </Button>
-      </Grid>
-    </Grid>
+      <div className="justify-content-between">
+        <Link to="/">
+          <button type="button" className="btn btn-secondary col-4 float-left">
+            Back to Homepage
+          </button>
+        </Link>
+        <Link to="/sign_up">
+          <button type="button" className="btn btn-success col-4 float-right">
+            Sign Up
+          </button>
+        </Link>
+      </div>
+    </div>
   );
 }
 

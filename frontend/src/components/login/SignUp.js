@@ -1,5 +1,4 @@
 import React from "react";
-import { Button, Grid, TextField } from "@material-ui/core";
 import { useState } from "react";
 import getCookie from "../../csrftoken";
 
@@ -14,7 +13,8 @@ function SignUp() {
     setPassword(e.target.value);
   };
 
-  const signup_clicked = () => {
+  const signup_clicked = (e) => {
+    e.preventDefault();
     const requestOptions = {
       credentials: "include",
       method: "POST",
@@ -38,35 +38,35 @@ function SignUp() {
     );
   };
   return (
-    <Grid className="signup" container spacing={2}>
-      <Grid item xs={12} align="center">
-        <h1>Sign up</h1>
-      </Grid>
-      <Grid item xs={12} align="center">
-        <TextField
-          id="outlined-basic"
-          label="User name"
-          variant="outlined"
-          value={username}
-          onChange={username_change}
-        />
-      </Grid>
-      <Grid item xs={12} align="center">
-        <TextField
-          id="outlined-basic"
-          label="Password"
-          variant="outlined"
-          value={password}
-          onChange={password_change}
-        />
-      </Grid>
-      <Grid item xs={12} align="center">
-        <Button variant="contained" color="primary" onClick={signup_clicked}>
+    <div className="container">
+      <h1>Sign Up</h1>
+      <form>
+        <div class="form-group">
+          <label for="email">User Name:</label>
+          <input
+            class="form-control"
+            placeholder="Enter Username"
+            onChange={username_change}
+          />
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Enter password"
+              id="pwd"
+              onChange={password_change}
+            />
+          </div>
+        </div>
+        <button
+          className="btn btn-primary btn-block mb-4"
+          onClick={signup_clicked}
+        >
           Sign Up
-        </Button>
-      </Grid>
-      <Grid></Grid>
-    </Grid>
+        </button>
+      </form>
+    </div>
   );
 }
 

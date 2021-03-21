@@ -1,0 +1,37 @@
+.header {
+  background-color: rebeccapurple;
+  width: 100vw;
+  height: 60px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.header_menu {
+  grid-column: 1 / span 1;
+  img {
+    width: 40px;
+    height: 40px;
+  }
+}
+.header_logo {
+  grid-column: 2 / span 3;
+  height: 60px;
+  img {
+    object-fit: contain;
+  }
+}
+.header_search {
+  grid-column: 6 / span 5;
+  img {
+    width: 100px;
+    height: 60px;
+  }
+}
+
+.header_logout {
+  grid-column: 11 / span 2;
+}

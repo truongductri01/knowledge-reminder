@@ -6,11 +6,11 @@ import SignUp from "./login/SignUp";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Button } from "@material-ui/core";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState();
   const [userKey, setUserKey] = useState();
+  const [canRender, setCanRender] = useState(false);
 
   const sessionInfo = async () => {
     await fetch("/api/user_logged_in")
@@ -18,6 +18,7 @@ function App() {
       .then((data) => {
         setUserKey(data.user_key);
         setLoggedIn(data.logged_in);
+        setCanRender(true);
       });
   };
 
@@ -32,14 +33,9 @@ function App() {
       return (
         <div>
           <h1>You need to Log In first</h1>
-          <Button
-            variant="contained"
-            color="secondary"
-            to="/log_in"
-            component={Link}
-          >
-            Go to Login Page
-          </Button>
+          <Link to="log_in">
+            <button className="btn btn-primary">Go to Log In Page</button>
+          </Link>
         </div>
       );
     }
@@ -47,7 +43,7 @@ function App() {
 
   console.log({ loggedIn: loggedIn, userKey });
   return (
-    <div>
+    <div className="container">
       <Router>
         <Switch>
           <Route path="/log_in">
@@ -56,7 +52,7 @@ function App() {
           <Route path="/sign_up">
             <SignUp />
           </Route>
-          <Route path="/">{renderHomepage()} </Route>
+          <Route path="/">{canRender && renderHomepage()}</Route>
         </Switch>
       </Router>
     </div>

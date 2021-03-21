@@ -1,8 +1,6 @@
 import React from "react";
-import { Button } from "@material-ui/core";
 import getCookie from "../csrftoken";
-
-const is_loggedIn = () => {};
+import Header from "./navBar/Header";
 
 function Homepage(props) {
   const handleLogOut = () => {
@@ -22,11 +20,12 @@ function Homepage(props) {
   };
   return (
     <div>
+      <Header />
       <h1>This is Homepage</h1>
       <h2>User key: {props.userKey}</h2>
-      <Button variant="contained" color="primary" onClick={handleLogOut}>
+      <button className="btn btn-danger " onClick={handleLogOut}>
         Log out
-      </Button>
+      </button>
     </div>
   );
 }
