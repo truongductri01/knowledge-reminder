@@ -20,7 +20,7 @@ class SignUpView(APIView):
         serializer = self.serializer_class(data=request.data)
         print(serializer)
         if serializer.is_valid():
-            print("Valid serializer")
+            print("Valid")
         
         user_name = serializer.data.get("user_name")
         password = serializer.data.get("password")
