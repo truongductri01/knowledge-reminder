@@ -1,3 +1,4 @@
+from django.http.response import Http404
 from note.models import Note
 from rest_framework.views import APIView
 from rest_framework import generics, status
@@ -6,28 +7,68 @@ from .models import Question
 from rest_framework.response import Response
 # Create your views here.
 
+def get_note_object(note_id):
+    try:
+        return Note.objects.get(pk=note_id)
+    except Note.DoesNotExist:
+        raise Http404
+
+def get_question_object(question_id):
+    try:
+        return Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404
+
 class GetQuestionsView(generics.ListAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
 class CreateQuestionsView(APIView):
-    serializer_class = QuestionSerializer
+    serializer_class = QuestionCreateSerializer
+    look_up_kwarg = "note_id"
     def post(self, request, format=None):
-        serializer = QuestionSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
+        note_id = request.GET.get(self.look_up_kwarg)
+        print(note_id)
         if serializer.is_valid():
-            note_id = serializer.data.get("note")
-            question_title = serializer.data.get("title")
-            notes = Note.objects.filter(id=note_id)
-            if notes.exists():
-                question = Question(question_title=question_title, note=notes[0])
-                question.save()
-                return Response(QuestionSerializer(question).data, status=status.HTTP_200_OK)
-            else:
-                return Response({"Bad Request": "Note not exists"}, status=status.HTTP_400_BAD_REQUEST)
+            question_title = serializer.data.get("question_title")
+            note = get_note_object(note_id)
+            question = Question(note=note, question_title=question_title)
+            question.save()
+            return Response(QuestionCreateSerializer(question).data, status=status.HTTP_200_OK)
+
         return Response({"Bad Request": "Cannot create Question"}, status=status.HTTP_400_BAD_REQUEST)
 
+class GetSingleQuestionView(APIView):
+    def get(self, request, format=None):
+        question = get_question_object(request.GET.get("question_id"))
+        serializer = QuestionSerializer(question)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class EditAndDeleteQuestion(APIView):
+    serializer_class = EditQuestionSerializer
+    look_up_kwarg = "question_id"
+
+    def get(self, request, format=None):
+        question = get_question_object(request.GET.get(self.look_up_kwarg))
+        serializer = self.serializer_class(question)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, format=None):
+        question = get_question_object(request.GET.get(self.look_up_kwarg))
+        serializer = self.serializer_class(question, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"Bad Request": "Cannot Edit"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, format=None):
+        question:Question = get_question_object(request.GET.get(self.look_up_kwarg))
+        question.delete()
+        return Response({"Success": "Question deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+
 class GetQuestionsFromNoteView(APIView):
-    serilizer_class = QuestionFromNoteSerializer
     look_up_kwarg = "note_id"
     def get(self, request, format=None):
         note_id = request.GET.get(self.look_up_kwarg)
