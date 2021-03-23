@@ -1,0 +1,20 @@
+.navbar {
+  background-color: white;
+  z-index: 10000;
+}
+
+.navbar .navbar-icon {
+  background-color: white;
+  width: 40px;
+  height: 40px;
+}
+
+.navbar .menu {
+  width: 40px;
+  height: 40px;
+}
+
+.navbar .nav-link {
+  cursor: pointer;
+}
+/*# sourceMappingURL=header.css.map */
