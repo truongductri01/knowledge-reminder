@@ -1,7 +1,6 @@
 import React from "react";
 
 function QuestionCard(props) {
-  console.log("Props in Question Card >>>", props);
   return (
     <div class="card">
       <div class="card-header">

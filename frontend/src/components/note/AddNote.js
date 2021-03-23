@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import getCookie from "../../csrftoken";
+useSelector;
 
-function AddNote(props) {
-  const userKey = props.userKey;
+function AddNote() {
+  const userKey = useSelector((state) => state.userKey);
   const [noteTitle, setNoteTitle] = useState("");
+  const [requestOk, setRequestOk] = useState(false);
   const [questionTitle, setQuestionTitle] = useState("");
   const [answerContent, setAnswerContent] = useState("");
 
@@ -47,6 +50,7 @@ function AddNote(props) {
       .then((response) => {
         console.log(response);
         if (response.ok) {
+          setRequestOk(true);
           return response.json();
         } else {
           alert("Errors");
