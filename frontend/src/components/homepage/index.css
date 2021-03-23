@@ -1,0 +1,9 @@
+.homepage {
+  height: 100%;
+  font-size: 1.2em;
+}
+
+h1 {
+  height: fit-content;
+  color: black;
+}
