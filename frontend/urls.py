@@ -6,5 +6,7 @@ app_name = "frontend"
 urlpatterns = [
     path("", index, name=""),
     path("log_in/", index),
-    path("sign_up/", index)
+    path("sign_up/", index),
+    path("note/", index),
+    path("test/", index)
 ]
