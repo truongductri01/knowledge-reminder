@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Homepage from "./Homepage";
+import Homepage from "./homepage/Homepage";
 import Login from "./login/Login";
 import SignUp from "./login/SignUp";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
+import Header from "./navBar/Header";
+import Note from "./note/Note";
+import Test from "./test/Test";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState();
@@ -43,8 +46,9 @@ function App() {
 
   console.log({ loggedIn: loggedIn, userKey });
   return (
-    <div className="container">
+    <div className="container-fluid m-0 p-0 app">
       <Router>
+        {loggedIn && <Header />}
         <Switch>
           <Route path="/log_in">
             <Login />
@@ -52,7 +56,9 @@ function App() {
           <Route path="/sign_up">
             <SignUp />
           </Route>
-          <Route path="/">{canRender && renderHomepage()}</Route>
+          <Route path="/note">{canRender && <Note userKey={userKey} />}</Route>
+          <Route path="/test">{canRender && <Test />}</Route>
+          <Route path="/">{canRender && <div>{renderHomepage()}</div>}</Route>
         </Switch>
       </Router>
     </div>
