@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import AddNote from "./AddNote";
 import NoteCard from "./NoteCard";
 
 function Note(props) {
-  const user_key = props.userKey;
+  const userKey = useSelector((state) => state.userKey);
   const [notes, setNotes] = useState([]);
   const [notesJSX, setNotesJSX] = useState();
-  const getNotesForUsers = async (user_key) => {
+  const getNotesForUsers = async (userKey) => {
     await fetch(
-      `http://127.0.0.1:8000/note/view_user_notes?user_key=${user_key}`
+      `http://127.0.0.1:8000/note/view_user_notes?user_key=${userKey}`
     )
       .then((response) => {
         if (response.ok) {
@@ -20,7 +21,6 @@ function Note(props) {
           setNotes(data.notes);
           setNotesJSX(
             data.notes.map((note) => {
-              console.log(note.note_title);
               return <NoteCard noteTitle={note.note_title} id={note.id} />;
             })
           );
@@ -29,8 +29,8 @@ function Note(props) {
   };
 
   useEffect(() => {
-    getNotesForUsers(user_key);
-  }, [user_key]);
+    getNotesForUsers(userKey);
+  }, [userKey]);
   return (
     <div className="note container">
       <div className="container d-flex align-items-center justify-content-between">
@@ -43,7 +43,7 @@ function Note(props) {
           Add Note
         </button>
 
-        <AddNote userKey={user_key} />
+        <AddNote userKey={userKey} />
       </div>
       <div className="container row d-flex justify-content-center align-items-center">
         {notesJSX}

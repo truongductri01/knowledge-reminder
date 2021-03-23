@@ -1,37 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Homepage from "./homepage/Homepage";
 import Login from "./login/Login";
 import SignUp from "./login/SignUp";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
 import Header from "./navBar/Header";
 import Note from "./note/Note";
 import Test from "./test/Test";
 
+import { createStore } from "redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import reducer from "../redux/reducer";
+import initialState from "../redux/initialState";
+import logIn from "../redux/actions/logIn";
+import logOut from "../redux/actions/logOut";
+
+const store = createStore(
+  reducer,
+  initialState,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
 function App() {
-  const [loggedIn, setLoggedIn] = useState();
-  const [userKey, setUserKey] = useState();
   const [canRender, setCanRender] = useState(false);
+  const dispatch = useDispatch();
+  const loggedIn = useSelector((state) => state.loggedIn);
 
   const sessionInfo = async () => {
     await fetch("/api/user_logged_in")
       .then((response) => response.json())
       .then((data) => {
-        setUserKey(data.user_key);
-        setLoggedIn(data.logged_in);
+        if (data.logged_in) {
+          dispatch(logIn(data.user_key));
+        } else {
+          dispatch(logOut());
+        }
         setCanRender(true);
       });
   };
 
   useEffect(() => {
     sessionInfo();
-  }, [loggedIn, userKey]);
+  }, [loggedIn]);
 
   const renderHomepage = () => {
     if (loggedIn) {
-      return <Homepage loggedIn={loggedIn} userKey={userKey} />;
+      return <Homepage />;
     } else {
       return (
         <div>
@@ -44,7 +58,6 @@ function App() {
     }
   };
 
-  console.log({ loggedIn: loggedIn, userKey });
   return (
     <div className="container-fluid m-0 p-0 app">
       <Router>
@@ -56,7 +69,7 @@ function App() {
           <Route path="/sign_up">
             <SignUp />
           </Route>
-          <Route path="/note">{canRender && <Note userKey={userKey} />}</Route>
+          <Route path="/note">{canRender && <Note />}</Route>
           <Route path="/test">{canRender && <Test />}</Route>
           <Route path="/">{canRender && <div>{renderHomepage()}</div>}</Route>
         </Switch>
@@ -65,4 +78,9 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("app")
+);
