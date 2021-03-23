@@ -1,4 +1,3 @@
-from http.client import parse_headers
 from django.urls import path
 from .views import GetAllAnswersView, GetAnswersFromQuestion
 

@@ -27,20 +27,22 @@ class GetAllAnswersView(ListAPIView):
 class GetAnswersFromQuestion(APIView):
     def get(self, request, format=None):
         question = get_question(request.GET.get("question_id"))
-        answers_set = self.get_answers_set(question)
-        print(answers_set)
-        return Response(answers_set, status=status.HTTP_200_OK)
+        answer = self.get_answer(question)
+        return Response(answer, status=status.HTTP_200_OK)
 
-    def get_answers_set(self, question):
-        print(question.answer_set.all())
-        temp_arr = []
-        for answer in question.answer_set.all():
-            temp_dict = {}
-            temp_dict["id"] = answer.id
-            temp_dict["question_title"] = answer.answer_content
-            temp_dict["question"] = answer.question.question_title
-            temp_arr.append(temp_dict)
-        return temp_arr
+    def get_answer(self, question):
+        if len(question.answer_set.all()) == 0:
+            return {}
+
+        answer = question.answer_set.all()[0]  # there can only be 1 answer for each question
+        return {
+            "id": answer.id,
+            "answer_content": answer.answer_content,
+            "question": answer.question.question_title
+        }
 
 # class GetSingleAnswer(APIView):
 #     def get(self, request, )
+
+
+# Only create answer if the quesitons did not have any answer
