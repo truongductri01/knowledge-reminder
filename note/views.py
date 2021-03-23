@@ -49,8 +49,9 @@ class CreateNote(APIView):
                 note = Note(user=user, note_title=serializer.data.get("note_title"))
                 note.save()
                 return Response({"Success": "Created new Note"}, status=status.HTTP_200_OK)
-            return Response({"Bad Request": "User does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"Bad Request": "Cannot create new Note"}, status=status.HTTP_200_OK)
+            print("User not exist")
+            return Response({"Unauthorized": "User does not exist"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EditAndDeleteNote(APIView):
     serializer_class = EditNoteSerializer
