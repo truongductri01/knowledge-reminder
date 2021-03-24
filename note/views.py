@@ -46,7 +46,7 @@ class CreateNote(APIView):
             users = User.objects.filter(user_key=user_key)
             if users.exists():
                 user = users[0]
-                note = Note(user=user, note_title=serializer.data.get("note_title"))
+                note = Note(user=user, note_title=serializer.data.get("note_title"), created_at = serializer.data.get("created_at"))
                 note.save()
                 return Response({"Success": "Created new Note"}, status=status.HTTP_200_OK)
             print("User not exist")

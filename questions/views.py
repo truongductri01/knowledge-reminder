@@ -32,8 +32,9 @@ class CreateQuestionsView(APIView):
         print(note_id)
         if serializer.is_valid():
             question_title = serializer.data.get("question_title")
+            answer_content = serializer.data.get("answer_content")
             note = get_note_object(note_id)
-            question = Question(note=note, question_title=question_title)
+            question = Question(note=note, question_title=question_title, answer_content=answer_content)
             question.save()
             return Response(QuestionCreateSerializer(question).data, status=status.HTTP_200_OK)
 
@@ -87,6 +88,7 @@ class GetQuestionsFromNoteView(APIView):
             temp_dict["id"] = question.id
             temp_dict["question_title"] = question.question_title
             temp_dict["categories"] = question.categories
+            temp_dict["answer_content"] = question.answer_content
             temp_arr.append(temp_dict)
         return temp_arr
     

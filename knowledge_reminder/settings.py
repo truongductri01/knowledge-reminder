@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     "frontend.apps.FrontendConfig",
     "note.apps.NoteConfig",
     "questions.apps.QuestionsConfig",
-    "answers.apps.AnswersConfig"
-
 ]
 
 MIDDLEWARE = [
