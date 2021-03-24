@@ -22,10 +22,10 @@ class NoteSerializer(serializers.ModelSerializer):
 class CreateNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields = ("note_title",)
+        fields = ("note_title", "created_at")
 
 # Note cannot be switch between users
 class EditNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields = ("note_title",)
+        fields = ("note_title", "created_at")
