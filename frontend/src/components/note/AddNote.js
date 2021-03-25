@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getCookie from "../../csrftoken";
 import NoteForm from "./NoteForm";
 
-function AddNote() {
+function AddNote(props) {
   const userKey = useSelector((state) => state.userKey);
   const [noteTitle, setNoteTitle] = useState("");
-  const [requestOk, setRequestOk] = useState(false);
   const [noteId, setNoteId] = useState(0);
   const [date, setDate] = useState(new Date());
 
@@ -15,6 +14,10 @@ function AddNote() {
       <NoteForm setNoteTitle={setNoteTitle} date={date} setDate={setDate} />
     );
   };
+
+  useEffect(() => {
+    return props.setReRender(true);
+  }, []);
 
   const handleSubmit = () => {
     const requestOptions = {
@@ -37,7 +40,6 @@ function AddNote() {
       .then((response) => {
         console.log(response);
         if (response.ok) {
-          setRequestOk(true);
           return response.json();
         } else {
           alert("Errors");
@@ -45,12 +47,13 @@ function AddNote() {
       })
       .then((data) => {
         setNoteId(data.pk);
+
+        // Close the modal if the request success
+        $("#addNote").modal("hide");
+        props.setShowModal(false);
       });
   };
 
-  console.log("Note id >>>", noteId);
-  console.log("Note Title >>>", noteTitle);
-  console.log("Date >>>", date);
   return (
     <div
       class="modal fade"
@@ -90,6 +93,9 @@ function AddNote() {
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
+              onClick={() => {
+                props.setShowModal(false);
+              }}
             >
               Close
             </button>
