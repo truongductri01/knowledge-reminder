@@ -1,32 +1,18 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import getCookie from "../../csrftoken";
-useSelector;
+import NoteForm from "./NoteForm";
 
 function AddNote() {
   const userKey = useSelector((state) => state.userKey);
   const [noteTitle, setNoteTitle] = useState("");
   const [requestOk, setRequestOk] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState("");
-  const [answerContent, setAnswerContent] = useState("");
+  const [noteId, setNoteId] = useState(0);
+  const [date, setDate] = useState(new Date());
 
   const renderAddNote = () => {
     return (
-      <form>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Note Title</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Enter Note Title"
-            value={noteTitle}
-            onChange={(e) => {
-              setNoteTitle(e.target.value);
-            }}
-          />
-        </div>
-        <hr />
-      </form>
+      <NoteForm setNoteTitle={setNoteTitle} date={date} setDate={setDate} />
     );
   };
 
@@ -40,6 +26,7 @@ function AddNote() {
       },
       body: JSON.stringify({
         note_title: noteTitle,
+        created_at: date,
       }),
     };
 
@@ -56,9 +43,14 @@ function AddNote() {
           alert("Errors");
         }
       })
-      .then((data) => console.log(data));
+      .then((data) => {
+        setNoteId(data.pk);
+      });
   };
 
+  console.log("Note id >>>", noteId);
+  console.log("Note Title >>>", noteTitle);
+  console.log("Date >>>", date);
   return (
     <div
       class="modal fade"
@@ -68,7 +60,11 @@ function AddNote() {
       aria-labelledby="exampleModalCenterTitle"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div
+        class="modal-dialog modal-dialog-centered"
+        role="document"
+        style={{ zIndex: "10000" }}
+      >
         <div class="modal-content">
           {/* Header */}
           <div class="modal-header">
