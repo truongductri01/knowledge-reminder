@@ -17,7 +17,7 @@ class GetNotesFromUserSerializer(serializers.ModelSerializer):
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
-        fields=("user", "note_title")
+        fields=("user", "note_title", "created_at", "pk")
 
 class CreateNoteSerializer(serializers.ModelSerializer):
     class Meta:

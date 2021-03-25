@@ -48,7 +48,7 @@ class CreateNote(APIView):
                 user = users[0]
                 note = Note(user=user, note_title=serializer.data.get("note_title"), created_at = serializer.data.get("created_at"))
                 note.save()
-                return Response({"Success": "Created new Note"}, status=status.HTTP_200_OK)
+                return Response(NoteSerializer(note).data, status=status.HTTP_200_OK)
             print("User not exist")
             return Response({"Unauthorized": "User does not exist"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
