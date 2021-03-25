@@ -3,7 +3,13 @@ import ReactDOM from "react-dom";
 import Homepage from "./homepage/Homepage";
 import Login from "./login/Login";
 import SignUp from "./login/SignUp";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import Header from "./navBar/Header";
 import Note from "./note/Note";
 import Test from "./test/Test";
@@ -69,9 +75,17 @@ function App() {
           <Route path="/sign_up">
             <SignUp />
           </Route>
-          <Route path="/note">{canRender && <Note />}</Route>
-          <Route path="/test">{canRender && <Test />}</Route>
-          <Route path="/">{canRender && <div>{renderHomepage()}</div>}</Route>
+          <Route path="/note">
+            {canRender && (loggedIn ? <Note /> : <Redirect to="/log_in" />)}
+          </Route>
+          {/* <Route path="/test">{canRender && <Test />}</Route> */}
+          <Route path="/">
+            {
+              canRender &&
+                (loggedIn ? <Redirect to="/note" /> : <Redirect to="/log_in" />)
+              // <div>{renderHomepage()}</div>
+            }
+          </Route>
         </Switch>
       </Router>
     </div>

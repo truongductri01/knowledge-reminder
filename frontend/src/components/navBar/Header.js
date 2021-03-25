@@ -4,25 +4,25 @@ import getCookie from "../../csrftoken.js";
 import { Link } from "react-router-dom";
 
 function Header() {
-  const [isHome, setIsHome] = useState(true);
-  const [isNote, setIsNote] = useState(false);
-  const [isTest, setIsTest] = useState(false);
+  // const [isHome, setIsHome] = useState(true);
+  // const [isNote, setIsNote] = useState(false);
+  // const [isTest, setIsTest] = useState(false);
 
-  const handleHomeClick = () => {
-    setIsHome(true);
-    setIsNote(false);
-    setIsTest(false);
-  };
-  const handleNoteClick = () => {
-    setIsHome(false);
-    setIsNote(true);
-    setIsTest(false);
-  };
-  const handleTestClick = () => {
-    setIsHome(false);
-    setIsNote(false);
-    setIsTest(true);
-  };
+  // const handleHomeClick = () => {
+  //   setIsHome(true);
+  //   setIsNote(false);
+  //   setIsTest(false);
+  // };
+  // const handleNoteClick = () => {
+  //   setIsHome(false);
+  //   setIsNote(true);
+  //   setIsTest(false);
+  // };
+  // const handleTestClick = () => {
+  //   setIsHome(false);
+  //   setIsNote(false);
+  //   setIsTest(true);
+  // };
 
   const handleLogOut = () => {
     const requestOptions = {
@@ -42,7 +42,8 @@ function Header() {
   return (
     <nav class="navbar navbar-expand-sm navbar-dark shadow p-0 pt-2 pb-2 mb-1 sticky-top rounded">
       <div className="navbar-brand col-1 m-0">
-        <Link to="/">
+        {/* Always link to the note link */}
+        <Link to="/note">
           {" "}
           <h1 className="text-center align-middle">K</h1>
         </Link>
@@ -57,7 +58,7 @@ function Header() {
         id="pills-tab"
         role="tablist"
       >
-        <li class="nav-item">
+        {/* <li class="nav-item">
           <Link to="/" onClick={handleHomeClick}>
             <a
               class={`nav-link ${isHome && "active"}`}
@@ -68,11 +69,14 @@ function Header() {
               Home
             </a>
           </Link>
-        </li>
+        </li> */}
         <li class="nav-item">
-          <Link to="/note" onClick={handleNoteClick}>
+          <Link
+            to="/note"
+            // onClick={handleNoteClick}
+          >
             <a
-              class={`nav-link ${isNote && "active"}`}
+              class={`nav-link active`}
               data-toggle="pill"
               role="tab"
               aria-selected="false"
@@ -81,7 +85,7 @@ function Header() {
             </a>
           </Link>
         </li>
-        <li class="nav-item">
+        {/* <li class="nav-item">
           <Link to="/test" onClick={handleTestClick}>
             <a
               class={`nav-link ${isTest && "active"}`}
@@ -92,7 +96,7 @@ function Header() {
               Test
             </a>
           </Link>
-        </li>
+        </li> */}
       </ul>
 
       <button className="btn btn-danger col-1" onClick={handleLogOut}>
