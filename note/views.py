@@ -17,7 +17,6 @@ class GetNoteFromUser(APIView):
     lookup_url_kwarg = "user_key"
     def get(self, request, format=None):
         user_key = request.GET.get(self.lookup_url_kwarg)
-        print("User key >>>",user_key)
         users = User.objects.filter(user_key=user_key)
         if users.exists():
             user = users[0]
@@ -50,7 +49,6 @@ class CreateNote(APIView):
                 note = Note(user=user, note_title=serializer.data.get("note_title"), created_at = serializer.data.get("created_at"))
                 note.save()
                 return Response(NoteSerializer(note).data, status=status.HTTP_200_OK)
-            print("User not exist")
             return Response({"Unauthorized": "User does not exist"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -96,18 +94,6 @@ class FilterNoteView(APIView):
             return Response(result)
         except ValueError:
             return Response({"Bad Request": "Not valid date format"}, status=status.HTTP_400_BAD_REQUEST)
-        
-
-        # user = users[0]
-        # print(user_key)
-        # serializer = self.serializer_class(data=request.data)
-        # if serializer.is_valid():
-        #     date = serializer.data.get("created_at")
-        #     notes = user.note_set.all().filter(created_at=date)
-        #     print(notes)
-        #     print("Serializer valid")
-        #     return Response({"Valid request": "Valid"})
-        # return Response({"invalid": "not a good serializer"})
 
 def get_object(note_id):
         try:
