@@ -3,10 +3,12 @@ import { useSelector } from "react-redux";
 import AddNote from "./AddNote";
 import NoteCard from "./NoteCard";
 
-function Note(props) {
+function Note() {
   const userKey = useSelector((state) => state.userKey);
   const [notes, setNotes] = useState([]);
   const [notesJSX, setNotesJSX] = useState();
+  const [showModal, setShowModal] = useState(false);
+  const [reRender, setReRender] = useState(false);
   const getNotesForUsers = async (userKey) => {
     await fetch(
       `http://127.0.0.1:8000/note/view_user_notes?user_key=${userKey}`
@@ -39,11 +41,14 @@ function Note(props) {
           className="btn btn-primary float-right"
           data-toggle="modal"
           data-target="#addNote"
+          onClick={() => setShowModal(true)}
         >
           Add Note
         </button>
 
-        <AddNote userKey={userKey} />
+        {showModal && (
+          <AddNote setShowModal={setShowModal} setReRender={setReRender} />
+        )}
       </div>
       <div className="container row d-flex justify-content-center align-items-center">
         {notesJSX}

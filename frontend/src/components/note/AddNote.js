@@ -1,34 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getCookie from "../../csrftoken";
-useSelector;
+import NoteForm from "./NoteForm";
 
-function AddNote() {
+function AddNote(props) {
   const userKey = useSelector((state) => state.userKey);
   const [noteTitle, setNoteTitle] = useState("");
-  const [requestOk, setRequestOk] = useState(false);
-  const [questionTitle, setQuestionTitle] = useState("");
-  const [answerContent, setAnswerContent] = useState("");
+  const [noteId, setNoteId] = useState(0);
+  const [date, setDate] = useState(new Date());
 
   const renderAddNote = () => {
     return (
-      <form>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Note Title</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Enter Note Title"
-            value={noteTitle}
-            onChange={(e) => {
-              setNoteTitle(e.target.value);
-            }}
-          />
-        </div>
-        <hr />
-      </form>
+      <NoteForm setNoteTitle={setNoteTitle} date={date} setDate={setDate} />
     );
   };
+
+  useEffect(() => {
+    return props.setReRender(true);
+  }, []);
 
   const handleSubmit = () => {
     const requestOptions = {
@@ -40,6 +29,7 @@ function AddNote() {
       },
       body: JSON.stringify({
         note_title: noteTitle,
+        created_at: date,
       }),
     };
 
@@ -50,13 +40,18 @@ function AddNote() {
       .then((response) => {
         console.log(response);
         if (response.ok) {
-          setRequestOk(true);
           return response.json();
         } else {
           alert("Errors");
         }
       })
-      .then((data) => console.log(data));
+      .then((data) => {
+        setNoteId(data.pk);
+
+        // Close the modal if the request success
+        $("#addNote").modal("hide");
+        props.setShowModal(false);
+      });
   };
 
   return (
@@ -68,7 +63,11 @@ function AddNote() {
       aria-labelledby="exampleModalCenterTitle"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div
+        class="modal-dialog modal-dialog-centered"
+        role="document"
+        style={{ zIndex: "10000" }}
+      >
         <div class="modal-content">
           {/* Header */}
           <div class="modal-header">
@@ -94,6 +93,9 @@ function AddNote() {
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
+              onClick={() => {
+                props.setShowModal(false);
+              }}
             >
               Close
             </button>
