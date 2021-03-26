@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import getCookie from "../../csrftoken";
+import urls from "../../urls";
 import NoteForm from "./NoteForm";
 import QuestionForm from "./QuestionForm";
 
@@ -43,10 +44,7 @@ function AddNote(props) {
       }),
     };
 
-    fetch(
-      `http://127.0.0.1:8000/note/create_note?user_key=${userKey}`,
-      requestOptions
-    )
+    fetch(urls.create_note(userKey), requestOptions)
       .then((response) => {
         console.log(response);
         if (response.ok) {

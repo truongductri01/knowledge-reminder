@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import getCookie from "../../csrftoken";
+import urls from "../../urls";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -28,16 +29,14 @@ function Login() {
         password: password,
       }),
     };
-    fetch("http://127.0.0.1:8000/api/log_in", requestOptions).then(
-      (response) => {
-        if (response.ok) {
-          window.location.href = "/";
-        } else {
-          console.log(response.statusText);
-          setError("Invalid Username or Password");
-        }
+    fetch(urls.log_in, requestOptions).then((response) => {
+      if (response.ok) {
+        window.location.href = "/";
+      } else {
+        console.log(response.statusText);
+        setError("Invalid Username or Password");
       }
-    );
+    });
   };
   return (
     <div className="container">

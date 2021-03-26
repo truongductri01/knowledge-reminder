@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import getCookie from "../../csrftoken";
+import urls from "../../urls";
 
 function SignUp() {
   const [username, setUsername] = useState("");
@@ -27,15 +28,13 @@ function SignUp() {
         password: password,
       }),
     };
-    fetch("http://127.0.0.1:8000/api/sign_up", requestOptions).then(
-      (response) => {
-        if (response.ok) {
-          window.location.href = "/log_in";
-        } else {
-          alert("Error with the page");
-        }
+    fetch(urls.sign_up, requestOptions).then((response) => {
+      if (response.ok) {
+        window.location.href = "/log_in";
+      } else {
+        alert("Error with the page");
       }
-    );
+    });
   };
   return (
     <div className="container">
