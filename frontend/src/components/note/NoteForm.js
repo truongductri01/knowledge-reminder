@@ -4,9 +4,12 @@ import DatePickerForm from "./DatePickerForm";
 function NoteForm(props) {
   const setNoteTitle = props.setNoteTitle;
   const [tempNotetitle, setTempNoteTitle] = useState("");
+  const counter = props.counter;
+  const setCounter = props.setCounter;
+  const setQuestions = props.setQuestions;
+
   let date = props.date;
   const setDate = props.setDate;
-
 
   return (
     <form className="mb-4 ">
@@ -26,20 +29,21 @@ function NoteForm(props) {
 
         <DatePickerForm date={date} setDate={setDate} />
 
-        {/* <button
+        <button
           className="btn btn-success float-right mt-2"
           onClick={(event) => {
             event.preventDefault();
-            setIdsSet((idsSet) => {
-              const newObject = idsSet;
-              newObject.push(counter);
+            // Add new question with the id
+            setQuestions((qSet) => {
+              const newObject = qSet;
+              newObject[counter] = { questionTitle: "", answerContent: "" };
               setCounter(counter + 1);
               return newObject;
             });
           }}
         >
           <strong>Add a Question</strong>
-        </button> */}
+        </button>
       </div>
     </form>
   );
