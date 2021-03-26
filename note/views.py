@@ -5,6 +5,7 @@ from api.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .serializers import *
+import datetime
 
 # Create your views here.
 class GetNotes(generics.ListAPIView):
@@ -74,6 +75,39 @@ class EditAndDeleteNote(APIView):
         note = get_object(request.GET.get(self.lookup_url_kwarg))
         note.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class FilterNoteView(APIView):
+    serializer_class = FilterNotesSerializer    
+    def get(self, request, format=None):
+        user_key = request.GET.get("user_key")
+        users = User.objects.filter(user_key=user_key)
+        if not users.exists():
+            return Response({"Unauthorized": "no user exists"})
+
+        user = users[0]
+        date = request.GET.get("date")
+        format = "%Y-%m-%d"
+        try:
+            datetime.datetime.strptime(str(date), format)
+            notes = Note.objects.filter(created_at=date, user=user)
+            result = []
+            for note in notes:
+                result.append(NoteSerializer(note).data)
+            return Response(result)
+        except ValueError:
+            return Response({"Bad Request": "Not valid date format"}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        # user = users[0]
+        # print(user_key)
+        # serializer = self.serializer_class(data=request.data)
+        # if serializer.is_valid():
+        #     date = serializer.data.get("created_at")
+        #     notes = user.note_set.all().filter(created_at=date)
+        #     print(notes)
+        #     print("Serializer valid")
+        #     return Response({"Valid request": "Valid"})
+        # return Response({"invalid": "not a good serializer"})
 
 def get_object(note_id):
         try:

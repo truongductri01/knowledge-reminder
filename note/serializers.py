@@ -8,6 +8,10 @@ class GetAllNotesSerializer(serializers.ModelSerializer):
         model = Note
         fields=("user", "note_title", "created_at", "pk")
 
+class FilterNotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields=("created_at",)
 
 class GetNotesFromUserSerializer(serializers.ModelSerializer):
     class Meta:
