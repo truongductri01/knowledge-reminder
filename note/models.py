@@ -6,7 +6,7 @@ from django.utils import timezone
 class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     note_title = models.CharField(max_length=150, null=False, blank=False)
-    created_at = models.DateTimeField(default=timezone.now, null=False, blank=False)
+    created_at = models.DateField(default=timezone.now, null=False, blank=False)
     hash_tag = []
     review_cycle = []
 

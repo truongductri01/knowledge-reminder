@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,11 +8,9 @@ function DatePickerForm(props) {
   const setDate = props.setDate;
   return (
     <DatePicker
+      dateFormat="MM/dd/yyyy"
       selected={date}
       onChange={(date) => setDate(date)}
-      timeInputLabel="Time:"
-      dateFormat="MM/dd/yyyy h:mm aa"
-      showTimeInput
     />
   );
 }

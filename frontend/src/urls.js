@@ -9,7 +9,8 @@ const urls = {
     BASE_URL + "note/view_user_notes?user_key=" + userKey,
   get_note_questions: (noteId) =>
     BASE_URL + "questions/get_questions_from_note?note_id=" + noteId,
-  create_note: (userKey) => BASE_URL + "note/create_note?user_key=" + userKey,
+  create_note: (userKey, createdAt) =>
+    BASE_URL + "note/create_note?user_key=" + userKey + "&date=" + createdAt,
   create_question: (noteId) =>
     BASE_URL + "questions/create_question?note_id=" + noteId,
 };
