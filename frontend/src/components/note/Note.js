@@ -22,7 +22,13 @@ function Note() {
           setNotes(data.notes);
           setNotesJSX(
             data.notes.map((note) => {
-              return <NoteCard noteTitle={note.note_title} id={note.id} />;
+              return (
+                <NoteCard
+                  noteTitle={note.note_title}
+                  id={note.id}
+                  createdAt={note.created_at}
+                />
+              );
             })
           );
         }

@@ -25,6 +25,7 @@ class GetNoteFromUser(APIView):
                 temp_dict = {}
                 temp_dict["id"] = note.id
                 temp_dict["note_title"] = note.note_title
+                temp_dict["created_at"] = note.created_at
                 notes["notes"].append(temp_dict)
             return JsonResponse(notes, status=status.HTTP_200_OK)
             
