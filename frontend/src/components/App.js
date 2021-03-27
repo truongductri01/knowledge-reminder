@@ -20,6 +20,7 @@ import reducer from "../redux/reducer";
 import initialState from "../redux/initialState";
 import logIn from "../redux/actions/logIn";
 import logOut from "../redux/actions/logOut";
+import urls from "../urls";
 
 const store = createStore(
   reducer,
@@ -33,7 +34,7 @@ function App() {
   const loggedIn = useSelector((state) => state.loggedIn);
 
   const sessionInfo = async () => {
-    await fetch("/api/user_logged_in")
+    await fetch(urls.check_log_in)
       .then((response) => response.json())
       .then((data) => {
         if (data.logged_in) {

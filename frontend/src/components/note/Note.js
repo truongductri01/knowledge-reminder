@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import urls from "../../urls";
 import AddNote from "./AddNote";
 import NoteCard from "./NoteCard";
 
@@ -10,9 +11,7 @@ function Note() {
   const [showModal, setShowModal] = useState(false);
   const [reRender, setReRender] = useState(false);
   const getNotesForUsers = async (userKey) => {
-    await fetch(
-      `http://127.0.0.1:8000/note/view_user_notes?user_key=${userKey}`
-    )
+    await fetch(urls.get_user_note(userKey))
       .then((response) => {
         if (response.ok) {
           return response.json();

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./header.css";
 import getCookie from "../../csrftoken.js";
 import { Link } from "react-router-dom";
+import urls from "../../urls";
 
 function Header() {
   // const [isHome, setIsHome] = useState(true);
@@ -33,7 +34,7 @@ function Header() {
         "X-CSRFToken": getCookie(),
       },
     };
-    fetch("/api/log_out", requestOptions).then((response) => {
+    fetch(urls.log_out, requestOptions).then((response) => {
       if (response.ok) {
         window.location.href = "/";
       }

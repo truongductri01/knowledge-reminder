@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import urls from "../../urls";
 import QuestionCard from "./QuestionCard";
 
 function NoteCard(props) {
@@ -19,9 +20,7 @@ function NoteCard(props) {
   };
 
   const getQuestions = async () => {
-    await fetch(
-      `http://127.0.0.1:8000/questions/get_questions_from_note?note_id=${noteId}`
-    )
+    await fetch(urls.get_note_questions(noteId))
       .then((response) => response.json())
       .then((data) => {
         let questions_result = [];
