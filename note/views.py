@@ -38,17 +38,25 @@ class GetNote(APIView):
 
 class CreateNote(APIView):
     serializer_class = CreateNoteSerializer
-    lookup_url_kwarg = "user_key"
     def post(self, request, format = None):
-        user_key = request.GET.get(self.lookup_url_kwarg)
+        user_key = request.GET.get("user_key")
+        date = request.GET.get("date")
+        print(user_key, date)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             users = User.objects.filter(user_key=user_key)
             if users.exists():
                 user = users[0]
-                note = Note(user=user, note_title=serializer.data.get("note_title"), created_at = serializer.data.get("created_at"))
-                note.save()
-                return Response(NoteSerializer(note).data, status=status.HTTP_200_OK)
+                format = "%Y-%m-%d"
+                try:
+                    datetime.datetime.strptime(str(date), format)
+                    note = Note(user=user, note_title=serializer.data.get("note_title"), created_at = date)
+                    note.save()
+                    return Response(NoteSerializer(note).data, status=status.HTTP_200_OK)
+                except ValueError:
+                    return Response({"Bad Request": "Not valid date format"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                
             return Response({"Unauthorized": "User does not exist"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
