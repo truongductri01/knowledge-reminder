@@ -4,6 +4,7 @@ import getCookie from "../../csrftoken";
 import urls from "../../urls";
 import NoteForm from "./NoteForm";
 import QuestionForm from "./QuestionForm";
+import * as moment from "moment";
 
 function AddNote(props) {
   const userKey = useSelector((state) => state.userKey);
@@ -31,6 +32,10 @@ function AddNote(props) {
   }, []);
 
   const handleSubmit = () => {
+    const formattedDate =
+      date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
+    console.log("Formatted date >>>", formattedDate);
+    console.log("moment date >>>", moment(date).format("yyyy-mm-dd"));
     const requestOptions = {
       credentials: "include",
       method: "POST",
@@ -40,7 +45,7 @@ function AddNote(props) {
       },
       body: JSON.stringify({
         note_title: noteTitle,
-        created_at: date,
+        created_at: date.toISOString(),
       }),
     };
 
@@ -100,6 +105,8 @@ function AddNote(props) {
         console.log("error when fetching");
       });
   };
+
+  console.log("date >>>", date.toISOString());
 
   return (
     <div
