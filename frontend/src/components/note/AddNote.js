@@ -4,12 +4,10 @@ import getCookie from "../../csrftoken";
 import urls from "../../urls";
 import NoteForm from "./NoteForm";
 import QuestionForm from "./QuestionForm";
-import * as moment from "moment";
 
 function AddNote(props) {
   const userKey = useSelector((state) => state.userKey);
   const [noteTitle, setNoteTitle] = useState("");
-  const [noteId, setNoteId] = useState(0);
   const [date, setDate] = useState(new Date());
   const [counter, setCounter] = useState(0);
   const [questions, setQuestions] = useState({}); // set of questions' objects
@@ -32,10 +30,6 @@ function AddNote(props) {
   }, []);
 
   const handleSubmit = () => {
-    const formattedDate =
-      date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
-    console.log("Formatted date >>>", formattedDate);
-    console.log("moment date >>>", moment(date).format("yyyy-mm-dd"));
     const requestOptions = {
       credentials: "include",
       method: "POST",
@@ -45,11 +39,13 @@ function AddNote(props) {
       },
       body: JSON.stringify({
         note_title: noteTitle,
-        created_at: date.toISOString(),
       }),
     };
 
-    fetch(urls.create_note(userKey), requestOptions)
+    fetch(
+      urls.create_note(userKey, date.toISOString().substring(0, 10)),
+      requestOptions
+    )
       .then((response) => {
         console.log(response);
         if (response.ok) {
@@ -59,7 +55,6 @@ function AddNote(props) {
         }
       })
       .then((data) => {
-        setNoteId(data.pk);
         handleSubmitQuestions(data.pk);
 
         // Close the modal if the request success
@@ -88,12 +83,7 @@ function AddNote(props) {
         }),
       };
 
-      promises.push(
-        fetch(
-          `http://127.0.0.1:8000/questions/create_question?note_id=${noteId}`,
-          requestOptions
-        )
-      );
+      promises.push(fetch(urls.create_question(noteId), requestOptions));
     }
     // const requestOptions
 
@@ -106,7 +96,7 @@ function AddNote(props) {
       });
   };
 
-  console.log("date >>>", date.toISOString());
+  console.log("date >>>", date.toISOString().substring(0, 10));
 
   return (
     <div
