@@ -45,9 +45,9 @@ function QuestionForm(props) {
 
         {/* Answer Content */}
         <label>Answer Content</label>
-        <input
-          type="textarea"
+        <textarea
           class="form-control"
+          rows="5"
           placeholder="Enter Note Title"
           onChange={handleAnswerContentChange}
         />
