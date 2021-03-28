@@ -21,7 +21,7 @@ class GetNoteFromUser(APIView):
         if users.exists():
             user = users[0]
             notes = {"notes": []}
-            for note in user.note_set.all():
+            for note in reversed(user.note_set.order_by("created_at")):
                 temp_dict = {}
                 temp_dict["id"] = note.id
                 temp_dict["note_title"] = note.note_title
