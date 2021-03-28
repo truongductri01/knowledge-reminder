@@ -47,7 +47,7 @@ function NoteCard(props) {
 
   return (
     <div
-      class="card col ml-2 mr-2 mb-2"
+      class="card col ml-2 mr-2 mb-2 mt-2"
       style={{
         minWidth: "300px",
         height: "400px",
@@ -56,7 +56,7 @@ function NoteCard(props) {
       }}
     >
       <div class="card-body">
-        <div className="card-title sticky-top bg-white mt-2 mb-2 d-flex align-items-center justify-content-between">
+        <div className="card-title bg-white mt-2 mb-2">
           <h5>{noteTitle}</h5>
           <p>{createdAt}</p>
         </div>
