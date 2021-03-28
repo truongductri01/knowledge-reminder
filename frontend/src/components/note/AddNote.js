@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import getCookie from "../../csrftoken";
 import urls from "../../urls";
@@ -7,6 +7,8 @@ import QuestionForm from "./QuestionForm";
 
 function AddNote(props) {
   const userKey = useSelector((state) => state.userKey);
+  const setNotes = props.setNotes;
+  const sortUp = props.sortUp;
   const [noteTitle, setNoteTitle] = useState("");
   const [date, setDate] = useState(new Date());
   const [counter, setCounter] = useState(0);
@@ -24,10 +26,6 @@ function AddNote(props) {
       />
     );
   };
-
-  useEffect(() => {
-    return props.setReRender(true);
-  }, []);
 
   const handleSubmit = () => {
     const requestOptions = {
@@ -56,6 +54,7 @@ function AddNote(props) {
       })
       .then((data) => {
         handleSubmitQuestions(data.pk);
+        insertNote(data.pk, data.note_title, data.created_at);
 
         // Close the modal if the request success
         $("#addNote").modal("hide");
@@ -96,8 +95,34 @@ function AddNote(props) {
       });
   };
 
-  console.log("date >>>", date.toISOString().substring(0, 10));
-
+  const insertNote = (noteId, noteTitle, createdAt) => {
+    setNotes((notes) => {
+      let insertIndex = notes.length - 1; // assume it will always be at the last position unless there is a suitable one
+      if (sortUp) {
+        // means that we need to put it where it is greater than the other notes
+        for (let i = 0; i < notes.length; i++) {
+          if (createdAt >= notes[i].created_at) {
+            insertIndex = i;
+            break;
+          }
+        }
+      } else {
+        // put it in where it is less than the notes before itself
+        for (let i = 0; i < notes.length; i++) {
+          if (createdAt < notes[i].created_at) {
+            insertIndex = i;
+            break;
+          }
+        }
+      }
+      notes.splice(insertIndex, 0, {
+        id: noteId,
+        note_title: noteTitle,
+        created_at: createdAt,
+      });
+      return notes;
+    });
+  };
   return (
     <div
       class="modal fade"
@@ -126,6 +151,9 @@ function AddNote(props) {
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              onClick={() => {
+                props.setShowModal(false);
+              }}
             >
               <span aria-hidden="true">&times;</span>
             </button>
