@@ -5,6 +5,7 @@ import QuestionCard from "./QuestionCard";
 function NoteCard(props) {
   const noteTitle = props.noteTitle;
   const noteId = props.id;
+  const createdAt = props.createdAt;
 
   // A list of objects representing questions with a new key-value pair of answers.
   const [questions, setQuestions] = useState([]);
@@ -55,7 +56,11 @@ function NoteCard(props) {
       }}
     >
       <div class="card-body">
-        <h5 class="card-title sticky-top bg-white mt-2 mb-2">{noteTitle}</h5>
+        <div className="card-title sticky-top bg-white mt-2 mb-2 d-flex align-items-center justify-content-between">
+          <h5>{noteTitle}</h5>
+          <p>{createdAt}</p>
+        </div>
+
         <div id="accordion">
           {canRenderQ &&
             questions.map((question) => <QuestionCard {...question} />)}
