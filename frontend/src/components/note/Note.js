@@ -12,7 +12,7 @@ function Note() {
   const [filterDate, setFilterDate] = useState(new Date());
   const [isFiltering, setIsFiltering] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [sortUp, setSortUp] = useState(true); // start with the biggest elements
+  const [sortUp, setSortUp] = useState(true); // start with the biggest elements as sortUp is true means the next sort will make the arrays start with the smallest element
 
   // Fetch the api and get the notes of the user
   const getNotesForUsers = async (userKey) => {
