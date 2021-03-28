@@ -80,7 +80,13 @@ function Note() {
           Add Note
         </button>
 
-        {showModal && <AddNote setShowModal={setShowModal} />}
+        {showModal && (
+          <AddNote
+            setShowModal={setShowModal}
+            setNotes={setNotes}
+            sortUp={sortUp}
+          />
+        )}
       </div>
       <div className="container d-flex align-items-center justify-content-between">
         <div className="container d-flex align-items-center p-0">
