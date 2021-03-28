@@ -151,6 +151,9 @@ function AddNote(props) {
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              onClick={() => {
+                props.setShowModal(false);
+              }}
             >
               <span aria-hidden="true">&times;</span>
             </button>
