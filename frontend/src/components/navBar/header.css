@@ -1,6 +1,7 @@
 .navbar {
   background-color: white;
-  z-index: 10000;
+  z-index: 10;
+  height: 60px;
 }
 
 .navbar .navbar-icon {
