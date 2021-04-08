@@ -100,7 +100,7 @@ function Header() {
         </li> */}
       </ul>
 
-      <button className="btn btn-danger col-1" onClick={handleLogOut}>
+      <button className="btn btn-danger col-2" onClick={handleLogOut}>
         Log out
       </button>
     </nav>

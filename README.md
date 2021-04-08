@@ -21,3 +21,8 @@ Django and React application which supports you plan out your review cycles
 15. User can edit or delete the Note or Test created
 16. User can edit his or her profile
 17. User can change the theme of the page
+
+Priorities:
+
+1. Deals with CORS and CSRF token
+2. Deploy the app for testing usage
